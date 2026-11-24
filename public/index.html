@@ -3,6 +3,7 @@
 <head><meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(d){d.classList.add("js");try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!location.hash)d.classList.add("js-veil")}catch(e){}})(document.documentElement)</script>
 <title>dr Sergiusz Trzeciak, Mentor Liderów: szkolenia i doradztwo dla samorządu, biznesu i kariery</title>
 <meta name="description" content="Pomagam liderom w samorządzie, biznesie i karierze zdobywać zaufanie: szkolę, doradzam i piszę książki, sprzedane w ponad 80 000 egzemplarzy.">
 <meta name="theme-color" content="#F8F9FB">
@@ -37,9 +38,13 @@
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 /* Tło całej strony zmienia kolor płynnie, gdy wjeżdża sekcja w innym kolorze (bez osobnych pudełek) */
-body{margin:0;background:var(--bg);color:var(--navy);font:400 17px/1.55 var(--text);overflow-x:clip;--soft:var(--muted);--rule:var(--line);transition:background-color .8s var(--ease-io),color .8s var(--ease-io)}
-body[data-theme=navy]{background:var(--navy);color:#fff;--soft:var(--on-navy);--rule:rgba(255,255,255,.18)}
-body[data-theme=red]{background:var(--red);color:#fff;--soft:rgba(255,255,255,.92);--rule:rgba(255,255,255,.3)}
+body{margin:0;background:var(--bg);color:var(--navy);font:400 17px/1.55 var(--text);overflow-x:clip;--soft:var(--muted);--rule:var(--line)}
+/* Sekcje w kolorze to ramki, które rosną przy wjeździe i maleją przy wyjeździe (przewijanie steruje nimi płynnie) */
+.plated{position:relative;isolation:isolate;color:#fff}
+.plate{position:absolute;inset:0;z-index:-1;background:var(--plate);border-radius:var(--r-xl);transform-origin:50% 0;will-change:clip-path}
+.work{--plate:var(--navy);--soft:var(--on-navy);--rule:rgba(255,255,255,.18)}
+.contact{--plate:var(--red);--soft:rgba(255,255,255,.92);--rule:rgba(255,255,255,.3)}
+.plated>.plate{left:var(--gap);right:var(--gap)}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
 h1,h2,h3{font-family:var(--head);margin:0;letter-spacing:-.03em;line-height:1;text-wrap:balance}
@@ -52,11 +57,11 @@ ul{margin:0;padding:0;list-style:none}
 .skip{position:absolute;left:16px;top:-64px;background:var(--navy);color:#fff;padding:12px 16px;border-radius:8px;z-index:100;text-decoration:none}
 .skip:focus{top:16px}
 .bar{position:fixed;left:0;top:0;height:3px;width:100%;background:var(--red);transform-origin:left;transform:scaleX(0);z-index:80;pointer-events:none}
-body[data-theme=red] .bar{background:#fff}
+body[data-hdr=red] .bar{background:#fff}
 
 /* Kropka na końcu nagłówka: ta sama, co kropki w znaku logo */
 .dot{display:inline-block;width:.19em;height:.19em;margin-left:.035em;border-radius:50%;background:var(--red);vertical-align:baseline}
-body[data-theme=red] .dot{background:var(--navy)}
+.contact .dot{background:var(--navy)}
 
 
 /* ===== Typografia 1:1 z Ondy (m-text, m-text-2…7, m-btn, m-link) ===== */
@@ -88,7 +93,7 @@ body[data-theme=red] .dot{background:var(--navy)}
 .link:hover::after,.link:focus-visible::after{transform:scaleX(1)}
 .link .icon{transition:transform .2s var(--ease)}
 .link:hover .icon{transform:translateX(4px)}
-body[data-theme=navy] .link::after,body[data-theme=red] .link::after{background:#fff}
+.plated .link::after,.foot .link::after{background:#fff}
 body .scard .link::after{background:var(--red)}
 
 /* ===== Pływający pasek: szklana pigułka, ciemnieje nad granatem ===== */
@@ -142,6 +147,13 @@ body .scard .link::after{background:var(--red)}
 .fx .intro{height:calc(100svh + 100svh)}
 .fx .hero{position:sticky;top:var(--gap)}
 .visual{position:absolute;inset:0;z-index:1;pointer-events:none}
+/* Wejście: granatowa ramka ze znakiem logo zwija się w koło za portretem */
+.veil{position:absolute;inset:0;background:var(--navy);display:none}
+.js-veil .veil{display:block}
+.veil-mark{position:absolute;left:0;top:0;width:clamp(120px,11vw,168px);height:auto;opacity:0;transform:translate(-50%,-50%)}
+.js-veil .disk-pop{transform:none!important;opacity:1!important;transition:none!important}
+.js-veil .top{opacity:0}
+.js-veil.is-ready .top{opacity:1;transition:opacity .7s ease-out .5s}
 .disk{position:absolute;left:50%;top:44%;width:min(54vh,38vw);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
 .disk-pop{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,var(--navy-2),var(--navy) 68%)}
 .orbit{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);overflow:visible;will-change:transform}
@@ -184,7 +196,7 @@ body .scard .link::after{background:var(--red)}
 .statement{position:absolute;inset:0;z-index:4;display:flex;align-items:center;padding:0 var(--margin);pointer-events:none;opacity:0;color:#fff}
 .statement .container{width:100%}
 .stmt{font:800 clamp(40px,7.4vw,124px)/.88 var(--head);letter-spacing:-.055em;max-width:13ch}
-.stmt .w{display:inline-block;opacity:.16;transform:translateY(.12em);transition:opacity .3s linear,transform .4s var(--ease)}
+.stmt .w{display:inline-block;opacity:.16;transform:translateY(.12em)}
 .stmt .w.on{opacity:1;transform:none}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;margin-top:clamp(32px,6vh,64px);max-width:1000px}
 .stats li{display:flex;flex-direction:column}
@@ -448,7 +460,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 
 /* ===== Wejścia (tylko z JS) ===== */
 .js .giant .ch>span{transform:translateY(105%)}
-.js.is-ready .giant .ch>span{transform:none;transition:transform .9s var(--ease)}
+.js.is-ready .giant .ch>span{transform:none;transition:transform 1s cubic-bezier(.16,.84,.24,1)}
 .js .disk-pop{transform:scale(.5);opacity:0}
 .js.is-ready .disk-pop{transform:none;opacity:1;transition:transform 1.1s var(--ease),opacity .6s ease-out}
 .js .orbit-pop{opacity:0}
@@ -527,6 +539,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
   <section class="hero" id="hero" aria-labelledby="h1">
     <div class="visual" aria-hidden="true">
       <div class="disk" id="disk"><div class="disk-pop"></div></div>
+      <div class="veil" id="veil"><svg class="veil-mark" id="veilMark" viewBox="0 0 285 288"><use href="#logo-white" width="975" height="288"/></svg></div>
       <svg class="orbit" id="orbit" width="10" height="10" viewBox="-5 -5 10 10"></svg>
       <p class="giant"><span class="giant-in" id="giant">TRZECIAK</span></p>
       <div class="portrait-wrap" id="portraitWrap">
@@ -657,7 +670,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 </section>
 
 <!-- ===== 5. Pracuj ze mną ===== -->
-<section class="work" id="wspolpraca" aria-labelledby="work-h" data-theme="navy">
+<section class="work plated" id="wspolpraca" aria-labelledby="work-h" data-theme="navy">
+  <div class="plate" aria-hidden="true"></div>
   <div class="container">
     <div class="sec-head">
       <h2 id="work-h" class="h2 split">Pracuj ze mną<span class="dot" aria-hidden="true"></span></h2>
@@ -703,7 +717,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 </section>
 
 <!-- ===== 7. Kontakt z formularzem ===== -->
-<section class="contact" id="kontakt" aria-labelledby="kontakt-h" data-theme="red" data-red-cta>
+<section class="contact plated" id="kontakt" aria-labelledby="kontakt-h" data-theme="red" data-red-cta>
+  <div class="plate" aria-hidden="true"></div>
   <div class="container">
     <h2 class="talk" id="kontakt-h"><span class="talk-in" id="talk">Porozmawiajmy<span class="dot" id="talkDot" aria-hidden="true"></span></span></h2>
     <div class="contact-grid">
@@ -856,6 +871,9 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
   const books = $$('.bk').map((b, i) => ({ b, c: $('.bk-cover', b), s: i ? 1 : -1, tx: 0, ty: 0 }));
   const now = $('#now'), archWin = $('#archWin'), archTrack = $('#archTrack');
   const contact = $('#kontakt');
+  const plates = $$('.plate');
+  const rXL = parseFloat(getComputedStyle(plates[0]).borderTopLeftRadius) || 32;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
   let ticking = false, theme = 'light';
 
   function frame() {
@@ -864,10 +882,10 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
     bar.style.transform = `scaleX(${clamp(y / (document.documentElement.scrollHeight - vh))})`;
     top.classList.toggle('is-scrolled', y > 24);
 
-    /* Kolor tła strony: według sekcji, która przecina środek ekranu */
+    /* Kolor paska u góry: według sekcji, która jest pod nim (tło strony już się nie przełącza) */
     let th = 'light';
-    for (const s of themed) { const r = s.getBoundingClientRect(); if (r.top <= vh * .5 && r.bottom > vh * .5) { th = s.dataset.theme; break; } }
-    if (th !== theme) { theme = th; body.dataset.theme = th; }
+    for (const s of themed) { const r = s.getBoundingClientRect(); if (r.top <= 64 && r.bottom > 64) { th = s.dataset.theme; break; } }
+    if (th !== theme) { theme = th; body.dataset.hdr = th; }
 
     let introP = 0;
     if (!reduce) {
@@ -890,9 +908,18 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
       pWrap.style.transform = `translateX(-50%) translateY(${pP * 18}%) scale(${1 + introP * .1})`;
       pWrap.style.opacity = 1 - pP;
       statement.style.opacity = clamp((introP - .38) / .1);
-      const n = Math.round(clamp((introP - .42) / .32) * words.length);
-      words.forEach((w, i) => w.classList.toggle('on', i < n));
+      /* Słowa zdania nabierają koloru płynnie, w tempie przewijania */
+      const tw = clamp((introP - .42) / .32) * words.length;
+      words.forEach((w, i) => { const k = clamp(tw - i); w.style.opacity = .16 + .84 * k; w.style.transform = `translateY(${(1 - k) * .12}em)`; });
       if (stats.parentElement !== heroStats) { const on = introP > .74; stats.classList.toggle('on', on); if (on) countAll(); }
+
+      /* Ramki w kolorze: rosną przy wjeździe sekcji, maleją przy wyjeździe */
+      plates.forEach(pl => {
+        const r = pl.parentElement.getBoundingClientRect();
+        const k = easeOut(clamp(Math.min((vh - r.top) / (vh * .9), r.bottom / (vh * .9))));
+        const x = (1 - k) * Math.min(96, vw * .06), rad = rXL + (1 - k) * 36;
+        pl.style.clipPath = `inset(0 ${x.toFixed(1)}px round ${rad.toFixed(1)}px)`;
+      });
 
       /* O mnie: delikatna paralaksa zdjęcia */
       const ar = aboutImg.getBoundingClientRect();
@@ -956,7 +983,38 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
   layout();
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(layout);
   addEventListener('load', layout);
-  requestAnimationFrame(() => requestAnimationFrame(() => { root.classList.add('is-ready'); if (!reduce && stats.parentElement === heroStats) setTimeout(countAll, 900); }));
+  /* Wejście na stronę: znak logo na granatowej ramce, ramka zwija się w koło za portretem, potem wchodzą portret, nazwisko i nagłówek */
+  const veil = $('#veil'), veilMark = $('#veilMark');
+  const ready = () => root.classList.add('is-ready');
+  if (root.classList.contains('js-veil') && veil.animate) {
+    const cx = disk.offsetLeft, cy = disk.offsetTop, r = disk.offsetWidth / 2;
+    const R0 = Math.hypot(Math.max(cx, hero.clientWidth - cx), Math.max(cy, hero.clientHeight - cy)) + 2;
+    veilMark.style.left = cx + 'px'; veilMark.style.top = cy + 'px';
+    const anims = [
+      veilMark.animate([
+        { opacity: 0, transform: 'translate(-50%,-50%) scale(.55) rotate(-140deg)', easing: 'cubic-bezier(.16,1,.3,1)' },
+        { opacity: 1, transform: 'translate(-50%,-50%) scale(1) rotate(0deg)', offset: .5, easing: 'ease-in-out' },
+        { opacity: 1, transform: 'translate(-50%,-50%) scale(1.04) rotate(10deg)', offset: .74, easing: 'cubic-bezier(.7,0,.84,0)' },
+        { opacity: 0, transform: 'translate(-50%,-50%) scale(.3) rotate(50deg)' }
+      ], { duration: 1300, easing: 'linear', fill: 'forwards' }),
+      veil.animate([
+        { clipPath: `circle(${R0}px at ${cx}px ${cy}px)` },
+        { clipPath: `circle(${r}px at ${cx}px ${cy}px)` }
+      ], { duration: 950, delay: 900, easing: 'cubic-bezier(.76,0,.24,1)', fill: 'forwards' })
+    ];
+    const tReady = setTimeout(ready, 1350);
+    const hideVeil = () => { veil.style.display = 'none'; };
+    anims[1].finished.then(() => veil.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).finished).then(hideVeil).catch(hideVeil);
+    /* Każdy ruch użytkownika kończy wejście od razu */
+    const evs = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+    const unbind = () => evs.forEach(e => window.removeEventListener(e, skip));
+    function skip() { clearTimeout(tReady); anims.forEach(a => { try { a.finish(); } catch (e) {} }); ready(); hideVeil(); unbind(); }
+    evs.forEach(e => window.addEventListener(e, skip, { passive: true }));
+    anims[1].finished.then(unbind).catch(unbind);
+  } else {
+    root.classList.toggle('js-veil', false);
+    requestAnimationFrame(() => requestAnimationFrame(ready));
+  }
 
   /* Wejścia treści */
   const rv = $$('.rv-up, .rv-mask, .split, .ways-list, .roles');
