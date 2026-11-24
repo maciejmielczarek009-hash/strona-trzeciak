@@ -1,0 +1,9 @@
+// Konfiguracja Cloudflare Workers: statyczna strona z folderu public/
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "strona-trzeciak",
+  "compatibility_date": "2025-11-01",
+  "assets": {
+    "directory": "./public"
+  }
+}
