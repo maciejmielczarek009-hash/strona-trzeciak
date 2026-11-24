@@ -1,7 +1,7 @@
 // Konfiguracja Cloudflare Workers: statyczna strona z folderu public/
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "strona-trzeciak",
+  "name": "trzeciak",
   "compatibility_date": "2025-11-01",
   "workers_dev": true,
   "preview_urls": true,
