@@ -105,21 +105,24 @@ body[data-hdr=red] .bar{background:#fff}
 /* ===== Przyciski i linki ===== */
 .btn{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;height:auto;padding:0 22px 0 18px;border-radius:999px;border:0;font:600 16px/1 var(--text);letter-spacing:-.01em;text-decoration:none;white-space:nowrap;cursor:pointer;transition:color .35s,translate .35s var(--ease)}
 .btn::before{content:"";width:8px;height:8px;flex:none;border-radius:999px;background:currentColor}
-.btn::after{content:"";position:absolute;z-index:-1;left:22px;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:999px;background:var(--navy);transform:scale(0);transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.btn::after{content:"";position:absolute;z-index:-1;left:22px;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:999px;background:var(--fill);transform:scale(0);transition:transform .5s cubic-bezier(.7,0,.2,1)}
 .btn:hover::after,.btn:focus-visible::after{transform:scale(60)}
+/* Wypełnienie na hover ma zawsze kolor inny niż tło pod przyciskiem; po wypełnieniu tło przycisku przejmuje ten kolor (bez cienkiej obwódki na krawędzi) */
+.btn{--fill:var(--navy);--fill-ink:#fff;--fill-dot:#fff}
+.btn:hover,.btn:focus-visible{background-color:var(--fill);color:var(--fill-ink);transition:color .35s,translate .35s var(--ease),background-color 0s .3s}
+.btn:hover::before,.btn:focus-visible::before{background:var(--fill-dot)}
 .btn--red{background:var(--red);color:#fff}
-.btn--navy{background:var(--navy);color:#fff}
+.btn--navy{background:var(--navy);color:#fff;--fill:var(--red)}
 .btn--navy::before{background:var(--red)}
-.btn--navy::after{background:var(--red)}
-.btn--navy:hover::before{background:#fff}
 .btn--white{background:#fff;color:var(--navy)}
 .btn--white::before{background:var(--red)}
-.btn--white:hover,.btn--white:focus-visible{color:#fff}
-.btn--white:hover::before{background:#fff}
+/* Na granacie biały przycisk jaśnieje zamiast granatowieć; na czerwieni granatowy bieleje zamiast czerwienieć */
+.work .btn--white,.foot .btn--white,.bk--navy .btn--white,.drawer .btn--white,.top.is-dark .pill .btn{--fill:var(--frame);--fill-ink:var(--navy);--fill-dot:var(--red)}
+.now .btn--navy{--fill:#fff;--fill-ink:var(--navy);--fill-dot:var(--red)}
 .btn .icon{width:18px;height:18px;transition:transform .25s var(--ease)}
 .btn:hover .icon{transform:translateY(3px)}
-.link{position:relative;display:inline-flex;align-items:center;gap:.45em;font:600 clamp(17px,1.45vw,21px)/1.2 var(--text);letter-spacing:-.015em;text-decoration:none;padding:12px 0}
-.link::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;border-radius:999px;background:var(--red);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s cubic-bezier(.7,0,.2,1)}
+.link{position:relative;display:inline-flex;align-items:center;gap:.45em;font:600 clamp(17px,1.45vw,21px)/1.2 var(--text);letter-spacing:-.015em;text-decoration:none;--pb:12px;padding:12px 0 var(--pb)}
+.link::after{content:"";position:absolute;left:0;right:0;bottom:calc(var(--pb) - 6px);height:2px;border-radius:999px;background:var(--red);transform:scaleX(0);transform-origin:0 50%;transition:transform .45s cubic-bezier(.7,0,.2,1)}
 .link:hover::after,.link:focus-visible::after{transform:scaleX(1)}
 .link .icon{transition:transform .2s var(--ease)}
 .link:hover .icon{transform:translateX(4px)}
@@ -142,6 +145,7 @@ body .scard .link::after{background:var(--red)}
 .pill .btn{min-height:48px;height:48px}
 .top.is-dark .pill .btn,.pill .btn.is-quiet{background:#fff;color:var(--navy);box-shadow:none}
 .top:not(.is-dark) .pill .btn.is-quiet{background:transparent;box-shadow:inset 0 0 0 2px var(--navy)}
+.top .pill .btn.btn:hover,.top .pill .btn.btn:focus-visible{background-color:var(--fill);color:var(--fill-ink)}
 .burger{display:none;width:48px;height:48px;border:0;background:transparent;color:inherit;border-radius:999px;cursor:pointer;align-items:center;justify-content:center}
 .burger .icon{width:24px;height:24px}
 .cta-short{display:none}
@@ -366,7 +370,7 @@ body .scard .link::after{background:var(--red)}
 .scard .icon{width:36px;height:36px;stroke-width:1.75}
 .scard h3{font-size:clamp(30px,3.9vw,58px);font-weight:700;letter-spacing:-.04em;line-height:.96;margin-top:auto}
 .scard p{font:500 clamp(19px,1.7vw,25px)/1.28 var(--text);letter-spacing:-.015em;margin-top:14px;color:var(--muted);max-width:22em}
-.scard .link{margin-top:10px;padding-bottom:0}
+.scard .link{margin-top:10px;--pb:0px}
 .scard .link .icon{width:20px;height:20px;stroke-width:2}
 .scard-img{position:relative;overflow:hidden}
 .scard-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform .8s var(--ease)}
@@ -646,6 +650,10 @@ h1,h2,h3,.h2,.stmt,.way-title,.now-title,.about-h,.bk h3,.scard h3,.fan-label,.t
 .vswitch a:hover{opacity:1}
 .vswitch a[aria-current]{background:#fff;color:#111318;opacity:1}
 
+/* Hover: tło przycisku przejmuje kolor wypełnienia (bez obwódki) */
+.hero .btn--navy:hover,.hero .btn--navy:focus-visible{background-color:var(--fill)}
+.card-form .btn--navy{--fill:var(--dark)}
+.card-form .btn--navy:hover,.card-form .btn--navy:focus-visible{background-color:var(--fill)}
 </style>
 </head>
 <body data-theme="light">
